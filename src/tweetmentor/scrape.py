@@ -17,6 +17,7 @@ from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 from Scweet import Scweet, ScweetConfig
@@ -30,6 +31,9 @@ from .config import (
     DEFAULT_MAX_EMPTY_PAGES,
 )
 
+# X's classic tweet timestamp format, e.g. "Wed Oct 10 20:19:24 +0000 2018".
+_TWEET_DATE_FORMAT = "%a %b %d %H:%M:%S %z %Y"
+
 
 @dataclass
 class ScrapeResult:
@@ -41,6 +45,32 @@ class ScrapeResult:
     completed: bool
     has_resume_point: bool
     output_file: Path
+    # Date coverage of every tweet saved so far for this user (oldest/newest
+    # first), so the user knows how far back they've walked and can decide
+    # whether to run scrape again. None if no parseable dates are saved yet.
+    oldest_date: str | None = None
+    newest_date: str | None = None
+
+
+def _parse_tweet_date(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, _TWEET_DATE_FORMAT)
+    except ValueError:
+        return None
+
+
+def _date_range(records: list[dict]) -> tuple[str | None, str | None]:
+    """Return (oldest, newest) tweet date among ``records``, as ``YYYY-MM-DD``.
+
+    Unparseable/missing dates are ignored. Returns (None, None) if none parse.
+    """
+    parsed = [_parse_tweet_date(r.get("date")) for r in records]
+    dates = [d for d in parsed if d is not None]
+    if not dates:
+        return None, None
+    return min(dates).date().isoformat(), max(dates).date().isoformat()
 
 
 def _slim(tweet: dict) -> dict:
@@ -131,16 +161,19 @@ async def _scrape_async(
     merged.update(resume_cursors or {})
     _save_cursors(cursor_file, merged)
 
-    total = len(json.loads(output_file.read_text(encoding="utf-8")))
+    all_records = json.loads(output_file.read_text(encoding="utf-8"))
+    oldest_date, newest_date = _date_range(all_records)
     return ScrapeResult(
         username=username,
         fetched=len(tweets),
         added=added,
-        total=total,
+        total=len(all_records),
         limit_reached=bool(response.get("limit_reached", False)),
         completed=bool(response.get("completed", False)),
         has_resume_point=bool(resume_cursors),
         output_file=output_file,
+        oldest_date=oldest_date,
+        newest_date=newest_date,
     )
 
 
