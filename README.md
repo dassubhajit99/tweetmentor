@@ -37,15 +37,10 @@ This installs the `tweetmentor` command.
 
 ## Configure
 
-`analyze` talks to any OpenAI-compatible endpoint (NVIDIA, OpenAI, Groq, etc).
-Copy the example env file and fill in your key:
-
 ```bash
 cp .env.example .env
 # edit .env: LLM_API_KEY is required, LLM_BASE_URL and LLM_MODEL are optional
 ```
-
-Secrets are read from the environment or `.env`. Don't hardcode API keys.
 
 ### X session cookies (for scraping)
 
@@ -58,7 +53,10 @@ Scraping authenticates as you, using your X session's `auth_token` cookie.
 
 ```json
 [
-  { "username": "your_handle", "cookies": { "auth_token": "PASTE_YOUR_TOKEN_HERE" } }
+  {
+    "username": "your_handle",
+    "cookies": { "auth_token": "PASTE_YOUR_TOKEN_HERE" }
+  }
 ]
 ```
 
@@ -148,8 +146,16 @@ Pass a JSON file to analyze any account for any set of topics:
 
 ```json
 [
-  { "id": "growth", "desc": "How they grew an audience", "title": "Audience growth" },
-  { "id": "writing", "desc": "How they write threads", "title": "Writing style" }
+  {
+    "id": "growth",
+    "desc": "How they grew an audience",
+    "title": "Audience growth"
+  },
+  {
+    "id": "writing",
+    "desc": "How they write threads",
+    "title": "Writing style"
+  }
 ]
 ```
 
