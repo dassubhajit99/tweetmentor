@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tweetmentor"
+version = "0.1.0"
+description = "Scrape an X (Twitter) account's timeline and turn it into a personalized study guide with an LLM."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Subhajit" }]
+keywords = ["twitter", "x", "scraping", "llm", "study-guide", "scweet"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+dependencies = [
+    "Scweet==5.3",
+    "openai>=1.40",
+    "python-dotenv>=1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/tweetmentor"
+Issues = "https://github.com/your-username/tweetmentor/issues"
+
+[project.scripts]
+tweetmentor = "tweetmentor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+tweetmentor = ["py.typed"]
