@@ -55,8 +55,14 @@ def _cmd_scrape(args: argparse.Namespace) -> int:
     success(f"Fetched {res.fetched} tweets this run ({res.added} new).")
     print(f"Total saved: {res.total} -> {res.output_file}")
     print(f"limit_reached={res.limit_reached} completed={res.completed}")
+    if res.oldest_date and res.newest_date:
+        print(f"Date range covered so far: {res.oldest_date} .. {res.newest_date}")
     if res.has_resume_point:
-        print(f"Saved resume point -> next run continues deeper ({args.cursor_file}).")
+        print(
+            f"Saved resume point -> run this same command again to keep walking "
+            f"further back (before {res.oldest_date or 'the above range'}). "
+            f"Stop any time — progress is saved in {args.cursor_file}."
+        )
     elif res.fetched:
         print("No resume cursor returned: reached the bottom of the timeline.")
     else:
