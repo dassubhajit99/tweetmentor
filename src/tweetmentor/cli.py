@@ -27,6 +27,7 @@ from .export import json_to_csv
 from .render import render_html
 from .scrape import scrape_user
 from .themes import ThemesError, load_themes
+from .ui import Spinner, note, success
 
 
 def _cmd_scrape(args: argparse.Namespace) -> int:
@@ -37,17 +38,21 @@ def _cmd_scrape(args: argparse.Namespace) -> int:
             file=sys.stderr,
         )
         return 2
-    res = scrape_user(
-        args.username,
-        cookies_file=args.cookies,
-        out_dir=args.out_dir,
-        cursor_file=args.cursor_file,
-        limit=args.limit,
-        max_empty_pages=args.max_empty_pages,
-        daily_requests_limit=args.daily_requests_limit,
-        daily_tweets_limit=args.daily_tweets_limit,
-    )
-    print(f"Fetched {res.fetched} tweets this run ({res.added} new).")
+    handle = args.username.lstrip("@").strip() or args.username
+    with Spinner(
+        f"Scraping @{handle} — walking back through the timeline (up to {args.limit})"
+    ):
+        res = scrape_user(
+            args.username,
+            cookies_file=args.cookies,
+            out_dir=args.out_dir,
+            cursor_file=args.cursor_file,
+            limit=args.limit,
+            max_empty_pages=args.max_empty_pages,
+            daily_requests_limit=args.daily_requests_limit,
+            daily_tweets_limit=args.daily_tweets_limit,
+        )
+    success(f"Fetched {res.fetched} tweets this run ({res.added} new).")
     print(f"Total saved: {res.total} -> {res.output_file}")
     print(f"limit_reached={res.limit_reached} completed={res.completed}")
     if res.has_resume_point:
@@ -73,13 +78,15 @@ def _cmd_analyze(args: argparse.Namespace) -> int:
 
     person = args.person or ("@" + Path(args.tweets).stem)
     try:
-        guide = analyze_tweets(
-            args.tweets,
-            cfg,
-            person=person,
-            themes=themes,
-            batch_size=args.batch_size,
-        )
+        with Spinner(f"Analyzing {person}'s tweets with the LLM") as sp:
+            guide = analyze_tweets(
+                args.tweets,
+                cfg,
+                person=person,
+                themes=themes,
+                batch_size=args.batch_size,
+                log=sp.update,
+            )
     except (AnalysisError, FileNotFoundError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -89,18 +96,19 @@ def _cmd_analyze(args: argparse.Namespace) -> int:
     html_out.parent.mkdir(parents=True, exist_ok=True)
     json_out.write_text(json.dumps(guide, ensure_ascii=False, indent=2), encoding="utf-8")
     html_out.write_text(render_html(guide, person=person, themes=themes), encoding="utf-8")
-    print(f"\nDone. Study guide: {html_out.resolve()}")
-    print(f"Structured data:   {json_out.resolve()}")
+    success(f"Done. Study guide: {html_out.resolve()}")
+    note(f"Structured data:   {json_out.resolve()}")
     return 0
 
 
 def _cmd_export(args: argparse.Namespace) -> int:
     try:
-        out = json_to_csv(args.input, args.output)
+        with Spinner(f"Flattening {args.input} → CSV"):
+            out = json_to_csv(args.input, args.output)
     except (FileNotFoundError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
-    print(f"Wrote {out}")
+    success(f"Wrote {out}")
     return 0
 
 
