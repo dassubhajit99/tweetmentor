@@ -1,0 +1,28 @@
+# ── Secrets & session state (NEVER commit) ──────────────────────────────
+.env
+cookies.json
+*.cookies.json
+scweet_state.db
+profile_cursors.json
+
+# ── Generated / scraped output ──────────────────────────────────────────
+outputs/
+study_guide.html
+study_guide.json
+*.csv
+
+# ── Python ──────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.eggs/
+
+# ── Editor / tooling ────────────────────────────────────────────────────
+.claude
+.idea/
+.vscode/
+.DS_Store
+CLAUDE.md
