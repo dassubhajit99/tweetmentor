@@ -93,6 +93,23 @@ tweetmentor export outputs/karpathy.json outputs/karpathy.csv
 
 Full option list for each command: `tweetmentor <command> --help`.
 
+## In action
+
+`scrape` walks the timeline oldest-first, one page per run, and reports progress as it goes:
+
+![scrape start](screenshots/01-scrape-start.png)
+![scrape complete](screenshots/02-scrape-complete.png)
+
+Running it again resumes deeper into the account's history instead of re-fetching what's already saved — here it's walked back from 500 → 505 tweets across a couple more runs:
+
+![scrape resume](screenshots/03-scrape-resume.png)
+
+`analyze` then runs a map-reduce pass over whatever's been scraped: mapping batches of tweets to per-theme observations, then reducing them into the final study guide:
+
+![analyze map step](screenshots/04-analyze-map.png)
+![analyze reduce step](screenshots/05-analyze-reduce.png)
+![study guide written](screenshots/06-study-guide-done.png)
+
 ### Re-running scrape
 
 A single `scrape` run pulls one page of the timeline, not the whole thing.
