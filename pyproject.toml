@@ -24,8 +24,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-username/tweetmentor"
-Issues = "https://github.com/your-username/tweetmentor/issues"
+Homepage = "https://github.com/dassubhajit99/tweetmentor"
+Issues = "https://github.com/dassubhajit99/tweetmentor/issues"
 
 [project.scripts]
 tweetmentor = "tweetmentor.cli:main"

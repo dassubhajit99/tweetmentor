@@ -26,7 +26,7 @@ themes** for any topic.
 Requires Python 3.10+.
 
 ```bash
-git clone https://github.com/your-username/tweetmentor.git
+git clone https://github.com/dassubhajit99/tweetmentor.git
 cd tweetmentor
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
