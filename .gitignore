@@ -6,9 +6,7 @@ scweet_state.db
 profile_cursors.json
 
 # ── Generated / scraped output ──────────────────────────────────────────
-outputs/
-study_guide.html
-study_guide.json
+outputs/*
 *.csv
 
 # ── Python ──────────────────────────────────────────────────────────────

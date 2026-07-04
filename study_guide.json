@@ -1,0 +1,194 @@
+{
+  "summary": "Andrej Karpathy's journey from academic researcher to founding member of OpenAI and AI leader at Tesla demonstrates that true mastery of AI requires understanding the entire stack from hardware to high-level abstractions. He remains effective by relentlessly building from scratch, creating educational 'ramps' for complex topics, and treating LLMs not just as models, but as a new computing paradigm (the 'LLM OS') that can be programmed in English. His recent evolution into 'vibe coding' and agentic engineering showcases a commitment to staying at the absolute frontier of tooling and development workflows.",
+  "themes": [
+    {
+      "id": "learning",
+      "title": "First-Principles Learning & Knowledge Management",
+      "patterns": [
+        {
+          "point": "Build from scratch to build intuition",
+          "detail": "Instead of relying on abstractions, he builds minimal implementations (micrograd, nanoGPT, llm.c) to understand the core dynamical systems. He trains tiny 2-token GPTs as finite state Markov chains to visualize exactly how Transformers modify transition probabilities.",
+          "examples": [
+            "https://x.com/karpathy/status/1803963383018066272",
+            "https://x.com/karpathy/status/1645115622517542913"
+          ]
+        },
+        {
+          "point": "Deep work over 'shortification'",
+          "detail": "He warns against learning from entertaining, bite-sized videos. To actually learn, he advocates closing blog posts and reading textbooks, papers, and manuals in 4-hour windows while taking notes. He also takes periodic 2-week internet detoxes to settle an over-stimulated brain.",
+          "examples": [
+            "https://x.com/karpathy/status/1756380066580455557",
+            "https://x.com/karpathy/status/1776269310631235806"
+          ]
+        },
+        {
+          "point": "LLM-assisted reading and knowledge bases",
+          "detail": "He reads everything in three passes: manual reading, LLM summarization, and Q&A. He uses LLMs to compile personal wikis in Obsidian from raw source documents, rarely editing the wiki manually, and runs 'health checks' to find missing data or new article candidates.",
+          "examples": [
+            "https://x.com/karpathy/status/1992381094667411768",
+            "https://x.com/karpathy/status/2039805659525644595"
+          ]
+        },
+        {
+          "point": "Make technical work accessible",
+          "detail": "He discovered that creating a video walking through code (micrograd) 100X'd engagement with the repo compared to just posting the code. He emphasizes building 'a ramp' to make complex technical work accessible to a broader audience.",
+          "examples": [
+            "https://x.com/karpathy/status/1760388761349927356"
+          ]
+        },
+        {
+          "point": "Track the frontier systematically",
+          "detail": "He uses specific resources to track trending AI projects: arxiv for papers, paperswithcode for implementations, and GitHub trending for code. He also maintains a yearly calendar reminder to make predictions for 1, 3, 5, 10, and 20 years ahead to assess his own accuracy.",
+          "examples": [
+            "https://x.com/karpathy/status/1627720337038393344",
+            "https://x.com/karpathy/status/1617265772631588865"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "title": "LLM Architecture & Training Paradigms",
+      "patterns": [
+        {
+          "point": "The 'LLM OS' mental model",
+          "detail": "He frames LLMs not as chatbots but as the kernel process of a new Operating System. He maps GPT components to computer architecture (context window = RAM, residual stream = registers, attention = LOAD/STORE, MLPs = ALU) and predicts that 'English' is the hottest new programming language.",
+          "examples": [
+            "https://x.com/karpathy/status/1707437820045062561",
+            "https://x.com/karpathy/status/1644183721405464576",
+            "https://x.com/karpathy/status/1617979122625712128"
+          ]
+        },
+        {
+          "point": "Textbook analogy for training stages",
+          "detail": "He explains the LLM training pipeline using a textbook analogy: pretraining is reading background info, supervised finetuning (SFT) is studying worked examples, and reinforcement learning (RL) is practicing end-of-chapter problems. He notes that RL is the emerging frontier where models discover 'aha moments' and cognitive strategies.",
+          "examples": [
+            "https://x.com/karpathy/status/1885026028428681698",
+            "https://x.com/karpathy/status/1883941452738355376"
+          ]
+        },
+        {
+          "point": "Navigating LLM 'Jagged Intelligence'",
+          "detail": "He coined 'Jagged Intelligence' to describe how LLMs can solve complex problems while failing catastrophically at simple ones (e.g., comparing 9.11 vs 9.9). He attributes this to the verifiability of the domain and the economics of what labs package into RL training data distributions.",
+          "examples": [
+            "https://x.com/karpathy/status/1816531576228053133",
+            "https://x.com/karpathy/status/2049903821095354523"
+          ]
+        },
+        {
+          "point": "Evaluations over benchmarks",
+          "detail": "He evaluates LLMs by talking to them directly across various tasks rather than relying on public benchmarks, which can be gamed. He uses personal 'gotcha' benchmarks (generating SVGs, decoding Unicode, tic-tac-toe) and advocates for using text-based games with self-balancing adaptive difficulty.",
+          "examples": [
+            "https://x.com/karpathy/status/1990854771058913347",
+            "https://x.com/karpathy/status/1891720635363254772",
+            "https://x.com/karpathy/status/1885740680804504010"
+          ]
+        },
+        {
+          "point": "Tokenization is a sharp edge",
+          "detail": "He emphasizes that tokenization creates many subtle bugs (trailing whitespace, poor spelling) and attack surfaces (SolidGoldMagikarp). He built a tokenizer visualization tool using emojis to explain the weirdness of LLM tokenization and hopes it can be thrown away in favor of byte-level training.",
+          "examples": [
+            "https://x.com/karpathy/status/1657949234535211009",
+            "https://x.com/karpathy/status/1816637781659254908",
+            "https://x.com/karpathy/status/1789590397749957117"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Agentic Engineering & 'Vibe Coding'",
+      "patterns": [
+        {
+          "point": "From 'vibe coding' to 'agentic engineering'",
+          "detail": "He coined 'vibe coding' for fully giving into LLM-driven development where you forget the code exists. A year later, he updated this to 'agentic engineering', emphasizing orchestrating agents who write the code while acting as oversight, claiming the leverage without compromising software quality.",
+          "examples": [
+            "https://x.com/karpathy/status/1886192184808149383",
+            "https://x.com/karpathy/status/2019137879310836075"
+          ]
+        },
+        {
+          "point": "Delegate via success criteria, not imperative instructions",
+          "detail": "He gives AI agents success criteria rather than step-by-step instructions, leveraging their ability to loop until goals are met. He has them write tests first and then pass them, or write naive correct algorithms first and then optimize them while preserving correctness.",
+          "examples": [
+            "https://x.com/karpathy/status/2015883857489522876"
+          ]
+        },
+        {
+          "point": "Write code like 'bacterial genomes'",
+          "detail": "He advocates for writing open-source code that is small, modular, and self-contained so functions can be easily 'yoinked' (copy-pasted) by others without importing dependencies. This is increasingly important to defend against supply chain attacks on packages.",
+          "examples": [
+            "https://x.com/karpathy/status/1941616674094170287",
+            "https://x.com/karpathy/status/2036487306585268612"
+          ]
+        },
+        {
+          "point": "Low-level optimization is power",
+          "detail": "He built llm.c, a ~5,000 line GPT training implementation in raw C/CUDA, after getting frustrated with PyTorch. He emphasizes understanding the physical lens of computing (energy/heat, data locality, parallelism) because that is what actually 'bestows power' in deep learning.",
+          "examples": [
+            "https://x.com/karpathy/status/1811467135279104217",
+            "https://x.com/karpathy/status/1919647115099451892"
+          ]
+        },
+        {
+          "point": "File over app",
+          "detail": "He endorses storing personal knowledge as simple collections of files in universal formats (images, markdown) rather than in proprietary apps. He values explicit, inspectable, interoperable data that any tool or CLI can operate on, and that you can plug any AI into.",
+          "examples": [
+            "https://x.com/karpathy/status/2040572272944324650"
+          ]
+        }
+      ]
+    }
+  ],
+  "action_plan": [
+    {
+      "step": "Build a minimal auto-grad engine or GPT from scratch in a single file",
+      "why": "To build intuition for the core dynamical systems of deep learning, you must strip away frameworks and write the math yourself. This exposes the 'sharp edges' and silent bugs that high-level libraries hide.",
+      "based_on": [
+        "https://x.com/karpathy/status/1803963383018066272",
+        "https://x.com/karpathy/status/1811467135279104217"
+      ]
+    },
+    {
+      "step": "Set up an Obsidian vault and use an LLM to auto-maintain a personal wiki",
+      "why": "Storing knowledge as plain-text markdown prevents lock-in and allows high composability with AI tools. You can index raw documents and have LLMs compile summaries, backlinks, and categorized concepts without manual editing.",
+      "based_on": [
+        "https://x.com/karpathy/status/1761467904737067456",
+        "https://x.com/karpathy/status/2039805659525644595"
+      ]
+    },
+    {
+      "step": "Adopt an 'agentic engineering' workflow by giving AI success criteria instead of instructions",
+      "why": "Transitioning from manual coding to orchestrating agents provides massive leverage. By asking agents to write tests first and loop until goals are met, you can build complex systems without touching the code directly.",
+      "based_on": [
+        "https://x.com/karpathy/status/2015883857489522876",
+        "https://x.com/karpathy/status/2019137879310836075"
+      ]
+    },
+    {
+      "step": "Create personal 'gotcha' benchmarks to evaluate new LLMs",
+      "why": "Public benchmarks can be gamed and don't reflect real-world 'jagged intelligence'. Testing models on tasks you understand deeply (e.g., generating specific SVGs, solving logic puzzles) gives you a true read on their capabilities.",
+      "based_on": [
+        "https://x.com/karpathy/status/1891720635363254772",
+        "https://x.com/karpathy/status/1990854771058913347"
+      ]
+    },
+    {
+      "step": "Schedule 4-hour reading blocks for dense material, taking notes manually",
+      "why": "Learning from 'shortified' entertaining videos creates an illusion of competence. True understanding requires deep focus, re-reading, and processing textbooks, papers, and manuals without distraction.",
+      "based_on": [
+        "https://x.com/karpathy/status/1756380066580455557",
+        "https://x.com/karpathy/status/1776269310631235806"
+      ]
+    },
+    {
+      "step": "Write modular, self-contained code functions that can be 'yoinked' without dependencies",
+      "why": "Deep dependency trees are a security risk (supply chain attacks) and a barrier to entry. Writing code like 'bacterial genomes' makes it easier for others (and AI agents) to copy, paste, and utilize your work.",
+      "based_on": [
+        "https://x.com/karpathy/status/1941616674094170287",
+        "https://x.com/karpathy/status/2036487306585268612"
+      ]
+    }
+  ],
+  "_person": "@karpathy"
+}
