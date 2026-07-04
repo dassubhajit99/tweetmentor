@@ -114,7 +114,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     # scrape
     sp = sub.add_parser("scrape", help="Scrape an X user's timeline (resumes on each run).")
-    sp.add_argument("username", help="X handle to scrape, e.g. Hi_Mrinal (@ optional).")
+    sp.add_argument("username", help="X handle to scrape, e.g. karpathy (@ optional).")
     sp.add_argument("--cookies", default="cookies.json", help="Path to X session cookies JSON.")
     sp.add_argument("--out-dir", default="outputs", help="Directory for <username>.json output.")
     sp.add_argument("--cursor-file", default="profile_cursors.json", help="Resume-cursor store.")

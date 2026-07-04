@@ -178,7 +178,7 @@ def analyze_tweets(
     """Run the full map-reduce analysis and return the study-guide dict.
 
     ``person`` labels the subject in prompts/headings (defaults to the tweets
-    file stem, e.g. ``@Hi_Mrinal``). ``themes`` defaults to the built-in dev
+    file stem, e.g. ``@karpathy``). ``themes`` defaults to the built-in dev
     themes.
     """
     log = log or _default_logger
