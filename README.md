@@ -1,25 +1,24 @@
 # tweetmentor
 
-Scrape an X (Twitter) account's timeline and turn its posts into a personalized,
-self-contained **study guide** — "how did this person grow their skills, and what
-should *I* do to follow the same path?"
+Scrape an X (Twitter) account's timeline and turn it into a study guide: concrete
+patterns pulled from the person's posts, plus an action plan for following the
+same path.
 
-It works in three steps:
+Three steps:
 
-1. **scrape** — walk any public profile's timeline (resuming deeper on each run).
-2. **analyze** — a map-reduce LLM pipeline extracts concrete patterns across your
-   themes and synthesizes a study guide (patterns + a checkable action plan).
-3. **export** — optionally flatten the scraped JSON into CSV.
+1. `scrape` — walk a public profile's timeline, resuming deeper on each run.
+2. `analyze` — a map-reduce LLM pipeline finds patterns across a set of themes
+   and writes them up as an HTML/JSON study guide.
+3. `export` — flatten scraped JSON into CSV, if you want it.
 
-The default themes describe *how someone became a developer* (learning, backend,
-AI, freelancing), but you can point it at **any account** and supply **your own
-themes** for any topic.
+The default themes are aimed at "how did this person become a developer"
+(learning habits, backend work, AI, freelancing), but both the target account
+and the themes are configurable.
 
-> ⚠️ **Use responsibly.** Scraping X may violate its Terms of Service and can get
-> your account rate-limited or suspended. Only scrape public data, go slow, and
-> use an account you're willing to risk. You are responsible for how you use this.
-
----
+> Scraping X may violate its Terms of Service and can get an account
+> rate-limited or suspended. Only scrape public data, keep request rates low,
+> and use an account you're okay risking. You're responsible for how you use
+> this.
 
 ## Install
 
@@ -36,30 +35,24 @@ This installs the `tweetmentor` command.
 
 ## Configure
 
-The **analyze** step talks to any OpenAI-compatible endpoint (NVIDIA, OpenAI,
-Groq, …). Copy the example env file and fill in your key:
+`analyze` talks to any OpenAI-compatible endpoint (NVIDIA, OpenAI, Groq, etc).
+Copy the example env file and fill in your key:
 
 ```bash
 cp .env.example .env
-# then edit .env: LLM_API_KEY (required), LLM_BASE_URL and LLM_MODEL (optional)
+# edit .env: LLM_API_KEY is required, LLM_BASE_URL and LLM_MODEL are optional
 ```
 
-Secrets are read from the environment or `.env` — **never hardcode API keys**.
+Secrets are read from the environment or `.env`. Don't hardcode API keys.
 
 ### X session cookies (for scraping)
 
 Scraping authenticates as you, using your X session's `auth_token` cookie.
 
-**1. Log into your account** at [x.com](https://x.com) in a browser.
-
-**2. Get your `auth_token`:**
-
-- Open DevTools (`F12`, or right-click → Inspect).
-- Go to the **Application** tab (in Firefox: **Storage**).
-- In the left sidebar, expand **Cookies** → click `https://x.com`.
-- Find the row named **`auth_token`** and copy its **Value**.
-
-**3. Put it in a `cookies.json` file** in the project root (Scweet format):
+1. Log into your account at [x.com](https://x.com) in a browser.
+2. Open DevTools (`F12`), go to Application → Storage → Cookies → `https://x.com`,
+   and copy the value of the `auth_token` cookie.
+3. Put it in a `cookies.json` file in the project root, in Scweet's format:
 
 ```json
 [
@@ -67,7 +60,8 @@ Scraping authenticates as you, using your X session's `auth_token` cookie.
 ]
 ```
 
-You can list multiple accounts to rotate between them (helps with rate limits):
+You can list more than one account to rotate between them, which helps with
+rate limits:
 
 ```json
 [
@@ -76,37 +70,65 @@ You can list multiple accounts to rotate between them (helps with rate limits):
 ]
 ```
 
-> 🔒 Your `auth_token` grants full access to your X account — treat it like a
-> password. Never commit it or share it. If it leaks, log out of that X session
-> (or change your password) to invalidate the token.
+Your `auth_token` grants full access to the account it belongs to — treat it
+like a password. Don't commit it or share it. If it leaks, log out of that X
+session (or change your password) to invalidate it.
 
 `cookies.json`, `.env`, `scweet_state.db` and `profile_cursors.json` are all
-gitignored — keep them local.
+gitignored.
 
 ## Usage
 
 ```bash
-# 1. Scrape — run repeatedly to walk further back through the timeline.
-#    Output accumulates (deduped) in outputs/<username>.json
+# 1. Scrape one batch of tweets, oldest-first from wherever the last run
+#    stopped. Output accumulates (deduped) in outputs/<username>.json
 tweetmentor scrape karpathy --limit 500
 
-# 2. Analyze — produce study_guide.html (+ study_guide.json)
+# 2. Analyze, producing study_guide.html (and study_guide.json)
 tweetmentor analyze outputs/karpathy.json -o study_guide.html
 
-# 3. Export — flatten any JSON to CSV
+# 3. Optional: flatten any of the JSON files to CSV
 tweetmentor export outputs/karpathy.json outputs/karpathy.csv
 ```
 
-See all options with `tweetmentor <command> --help`.
+Full option list for each command: `tweetmentor <command> --help`.
+
+### Re-running scrape
+
+A single `scrape` run pulls one page of the timeline, not the whole thing.
+Run the same command again to keep walking further back; each run resumes
+from where the previous one left off (see [How resume works](#how-resume-works))
+instead of re-fetching the newest tweets.
+
+Each run prints the date range currently covered in
+`outputs/<username>.json`, for example:
+
+```
+Total saved: 812 -> outputs/karpathy.json
+Date range covered so far: 2019-03-02 .. 2024-11-18
+Saved resume point -> run this same command again to keep walking further
+back (before 2019-03-02). Stop any time — progress is saved in
+profile_cursors.json.
+```
+
+A few things worth knowing:
+
+- There's nothing to clean up between runs. Come back days later and it
+  picks up from the saved cursor.
+- `analyze` works on whatever's been scraped so far — you don't need the
+  full timeline before running it, and you can re-run it later once you've
+  scraped more.
+- A run stops on its own (`completed=True`) once the timeline is exhausted
+  or a daily quota is hit; the printed message says which.
 
 ### Custom themes
 
-Pass a JSON file to analyze any account for any topics:
+Pass a JSON file to analyze any account for any set of topics:
 
 ```json
 [
-  { "id": "growth",  "desc": "How they grew an audience", "title": "📈 Audience growth" },
-  { "id": "writing", "desc": "How they write threads",    "title": "✍️ Writing style" }
+  { "id": "growth", "desc": "How they grew an audience", "title": "Audience growth" },
+  { "id": "writing", "desc": "How they write threads", "title": "Writing style" }
 ]
 ```
 
@@ -114,13 +136,30 @@ Pass a JSON file to analyze any account for any topics:
 tweetmentor analyze outputs/someone.json --themes my_themes.json --person "@someone"
 ```
 
-## How the resume works
+## How resume works
 
-Scweet's built-in `resume=True` doesn't persist pagination for profile timelines
-across separate runs, so plain runs keep re-fetching the newest tweets.
-tweetmentor drives the runner directly, saves the returned `resume_cursors` to
-`profile_cursors.json`, and feeds them back on the next run — so each run
-continues where the last one stopped.
+Scweet's built-in `resume=True` doesn't persist pagination for profile
+timelines across separate runs, so plain runs just keep re-fetching the
+newest tweets. tweetmentor works around this by driving the runner directly,
+saving the `resume_cursors` it returns to `profile_cursors.json`, and passing
+them back in on the next run.
+
+## Running tests
+
+```bash
+pip install -e ".[test]"
+pytest
+```
+
+Everything is mocked (Scweet, the LLM client, the filesystem via `tmp_path`),
+so the suite needs no network access, cookies, or API key.
+
+To run a single file or test:
+
+```bash
+pytest tests/test_scrape.py
+pytest tests/test_scrape.py -k test_date_range_returns_oldest_and_newest
+```
 
 ## Library use
 
