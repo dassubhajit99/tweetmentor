@@ -4,6 +4,8 @@ Scrape an X (Twitter) account's timeline and turn it into a study guide: concret
 patterns pulled from the person's posts, plus an action plan for following the
 same path.
 
+**Live example:** [dassubhajit99.github.io/tweetmentor/study_guide.html](https://dassubhajit99.github.io/tweetmentor/study_guide.html) — generated from [@karpathy](https://x.com/karpathy)'s timeline.
+
 Three steps:
 
 1. `scrape` — walk a public profile's timeline, resuming deeper on each run.
@@ -94,6 +96,8 @@ tweetmentor export outputs/karpathy.json outputs/karpathy.csv
 Full option list for each command: `tweetmentor <command> --help`.
 
 ## In action
+
+See a full generated guide live: [study_guide.html](https://dassubhajit99.github.io/tweetmentor/study_guide.html) (from [@karpathy](https://x.com/karpathy)'s timeline).
 
 `scrape` walks the timeline oldest-first, one page per run, and reports progress as it goes:
 
